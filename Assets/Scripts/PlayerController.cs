@@ -3,11 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    [SerializeField] private GameManager gameManager;
     [Header("Initial parameters")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float health = 100f;
     [SerializeField] private float maxHealth = 100f;
+    private Rigidbody2D rb;
+    private float cooldown = 0f;
+    private const float meleeCooldown = 1f;
 
     public float Health
     {
@@ -37,6 +40,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (cooldown > 0f)
+            cooldown -= Time.deltaTime;
+
         rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
+
+        if (Input.GetMouseButton(0))
+        {
+            if (cooldown <= 0f)
+            {
+                gameManager.TellPlayerMeleeAttack();
+                cooldown = meleeCooldown;
+            }
+        }
     }
 }

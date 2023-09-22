@@ -16,14 +16,14 @@ public class Simple : Enemy
     {
         GameObject plr = gameManager.Player.gameObject;
 
-        float angle = AngleTo(plr.transform.position);
-        //Debug.Log(transform.position + " " + plr.transform.position + " " + angle);
+        float angle = GameManager.DegAngleRelative(transform.position, plr.transform.position);
+
         if (Vector2.Distance(transform.position, gameManager.Player.transform.position) > 1f)
             rb.AddForce(new Vector2(-Mathf.Cos(angle) * speed * Time.deltaTime, -Mathf.Sin(angle) * speed * Time.deltaTime));
 
         if (cooldown <= 0f)
         {
-            gameManager.EnemyTellAttack(this);
+            gameManager.TellEnemyAttack(this);
             cooldown = attackCooldown;
         }
         else
