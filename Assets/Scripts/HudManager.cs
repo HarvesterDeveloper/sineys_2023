@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +13,7 @@ public class HudManager : MonoBehaviour
     private void Update()
     {
         healthImage.fillAmount = gameManager.Player.Health / gameManager.Player.MaxHealth;
-        progressImage.fillAmount = gameManager.EnemiesDied / gameManager.RequiredToKill;
+        progressImage.fillAmount = (float) gameManager.EnemiesDied / (float) gameManager.RequiredToKill;
+        progressText.text = "Прогресс: " + gameManager.EnemiesDied + "/" + gameManager.RequiredToKill;
     }
 }
