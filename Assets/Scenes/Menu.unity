@@ -353,11 +353,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 382968312}
+  - {fileID: 608327150}
   - {fileID: 1601526883}
   - {fileID: 939281705}
   - {fileID: 1407710231}
   - {fileID: 1747952526}
-  - {fileID: 608327150}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 213088696}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: LaunchGame
         m_Mode: 1
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 213088696}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
