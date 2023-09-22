@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void TellDamage(float hp)
+    {
+        health -= hp;
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();

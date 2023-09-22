@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -32,6 +31,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EnemyTellAttack(Enemy initiator)
+    {
+        if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 1f)
+        {
+            playerController.TellDamage(initiator.Damage * (initiator.Health / initiator.MaxHealth));
+            Debug.Log(initiator.Damage * (initiator.Health / initiator.MaxHealth));
+        }
+    }
+
     private void Start()
     {
         StartCoroutine("EverySecond");
@@ -42,7 +50,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 10_000; i++)
         {
             yield return new WaitForSeconds(1);
-            enemiesDied++; // its just for debug
+            //enemiesDied++; // its just for debug
         }
     }
 
