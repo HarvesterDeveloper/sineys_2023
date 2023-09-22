@@ -4,13 +4,15 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject background;
+    [SerializeField] private GameObject front;
     private float lifeTime = 0f;
 
     private void Update()
     {
         lifeTime += Time.deltaTime;
 
-        background.transform.position = new Vector2(Mathf.Cos(lifeTime) * 20f, Mathf.Sin(lifeTime) * 10f);
+        background.transform.position = new Vector2(Mathf.Cos(lifeTime) * 40f, Mathf.Sin(lifeTime) * 20f);
+        front.transform.position = new Vector2(-Mathf.Cos(lifeTime) * 10f, Mathf.Sin(lifeTime) * 5f);
     }
 
     public void LaunchGame()

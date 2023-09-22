@@ -54,4 +54,9 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
+
+    public virtual void Init()
+    {
+       //
+    }
 }

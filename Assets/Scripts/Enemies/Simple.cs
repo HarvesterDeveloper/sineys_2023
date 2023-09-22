@@ -13,6 +13,12 @@ public class Simple : Enemy
         damage = 3f;
     }
 
+   public override void Init()
+   {
+       base.Init();
+       health = 10f;
+   }
+
     private void Update()
     {
         if (target != null)

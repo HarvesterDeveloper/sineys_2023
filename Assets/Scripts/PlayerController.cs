@@ -1,18 +1,24 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
+    public delegate void PlayerAction();
+
     [SerializeField] private GameManager gameManager;
-    [Header("Initial parameters")]
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float health = 100f;
-    [SerializeField] private float maxHealth = 100f;
+    /*[Header("Initial parameters")]*/
+    private float speed = 2000f;
+    private float health = 100f;
+    private float maxHealth = 100f;
+    private float damage = 5f;
     private Rigidbody2D rb;
+    private Animator animator;
     private float cooldown = 0f;
     private const float meleeCooldown = 1f;
     private int killCount = 0;
     private int level = 1;
+    public event PlayerAction MeleeAttack;
 
     public float Health
     {
@@ -46,6 +52,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   public float Damage
+   {
+        get
+        {
+            return damage;
+        }
+   }
+
     public void TellDamage(float hp)
     {
         health -= hp;
@@ -65,6 +79,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -76,11 +91,22 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            
+
             if (cooldown <= 0f)
             {
-                gameManager.TellPlayerMeleeAttack();
+                animator.SetBool("Attacking", true);
+                MeleeAttack();
                 cooldown = meleeCooldown;
             }
+            else
+            {
+                animator.SetBool("Attacking", false);
+            }
+        }
+        else
+        {
+            //
         }
     }
 }

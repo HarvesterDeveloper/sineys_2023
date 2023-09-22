@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             //Debug.Log(initiator.Damage * (initiator.Health / initiator.MaxHealth));
         }
     }
-    public void TellPlayerMeleeAttack()
+    public void OnPlayerMeleeAttack()
     {
         Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
             Enemy temp = null;
             collider.gameObject.TryGetComponent<Enemy>(out temp);
             if (temp != null)
-                temp.TellDamage(25f);
+                temp.TellDamage(playerController.Damage);
         }
     }
 
@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         StartCoroutine("EverySecond");
+        playerController.MeleeAttack += OnPlayerMeleeAttack;
     }
 
     private void Update()
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
             e.target = playerController.gameObject;
             e.Died += OnEnemyKilled;
             e.SimpleAttack += OnSimpleEnemyAttack;
+            e.Init();
             lastSpawnTime = 0f;
         }
     }
