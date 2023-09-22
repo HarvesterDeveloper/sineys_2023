@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private int killCount = 0;
     private int level = 1;
     public event PlayerAction MeleeAttack;
+    public event PlayerAction LevelUp;
+    public float meleeRange = 2f;
 
     public float Health
     {
@@ -60,18 +62,35 @@ public class PlayerController : MonoBehaviour
         }
    }
 
+   public float MeleeRange
+   {
+        get
+        {
+            return meleeRange;
+        }
+
+        set
+        {
+           if (value < 2f)
+                value = 2f;
+           
+          meleeRange = value;
+        }
+   }
+
     public void TellDamage(float hp)
     {
         health -= hp;
     }
 
-    public void TellEnemyKilled()
+    public void OnEnemyKilled(Enemy who)
     {
         killCount++;
         if (killCount > gameManager.RequiredToLevelUp)
         {
             level++;
             killCount = 0;
+            LevelUp();
         }
         // boost as kill reward
     }

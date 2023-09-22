@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public delegate void GameManagerAction();
+
     public enum Mission
     {
         LEVEL_ONE,
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
     private int requiredToLevelUp = 10; // initial for first level up
     private int requiredToComplete = 5; // lvls to complete mission
     private float lastSpawnTime = 0f;
+    public event GameManagerAction AnyUpgradeChoosed;
 
     public PlayerController Player
     {
@@ -55,6 +58,13 @@ public class GameManager : MonoBehaviour
         return angle;
     }
 
+    public void OnMeleeRangeUpgrade()
+    {
+        playerController.MeleeRange += 1f;
+        Time.timeScale = 1f;
+        AnyUpgradeChoosed();
+    }
+
     private void OnSimpleEnemyAttack(Enemy initiator)
     {
         if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 1f)
@@ -63,15 +73,15 @@ public class GameManager : MonoBehaviour
             //Debug.Log(initiator.Damage * (initiator.Health / initiator.MaxHealth));
         }
     }
-    public void OnPlayerMeleeAttack()
+    private void OnPlayerMeleeAttack()
     {
         Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
 
         float angle = DegAngleRelative(playerController.transform.position, mousePos);
 
-        Collider2D[] colliders = Physics2D.OverlapAreaAll(playerController.transform.position + new Vector3(-Mathf.Cos(angle) - 1f, -Mathf.Sin(angle) + 1f),
-            playerController.transform.position + new Vector3(-Mathf.Cos(angle) + 1f, -Mathf.Sin(angle) - 1f));
+        Collider2D[] colliders = Physics2D.OverlapAreaAll(playerController.transform.position + new Vector3(-Mathf.Cos(angle) - playerController.MeleeRange, -Mathf.Sin(angle) + playerController.MeleeRange),
+            playerController.transform.position + new Vector3(-Mathf.Cos(angle) + playerController.MeleeRange, -Mathf.Sin(angle) - playerController.MeleeRange));
         foreach (Collider2D collider in colliders)
         {
             Enemy temp = null;
@@ -83,7 +93,12 @@ public class GameManager : MonoBehaviour
 
     private void OnEnemyKilled(Enemy dead)
     {
-        playerController.TellEnemyKilled();
+        //
+    }
+
+    private void OnLevelUp()
+    {
+        Time.timeScale = 0f;
     }
 
     private void Start()
@@ -91,7 +106,7 @@ public class GameManager : MonoBehaviour
         switch (mission)
         {
             case Mission.LEVEL_ONE:
-                requiredToLevelUp = 10;
+                requiredToLevelUp = 5;
                 requiredToComplete = 5;
                 break;
             case Mission.LEVEL_TWO:
@@ -105,6 +120,7 @@ public class GameManager : MonoBehaviour
         }
         StartCoroutine("EverySecond");
         playerController.MeleeAttack += OnPlayerMeleeAttack;
+        playerController.LevelUp += OnLevelUp;
     }
 
     private void Update()
@@ -117,6 +133,7 @@ public class GameManager : MonoBehaviour
             Simple e = spawned.GetComponent<Simple>();
             e.target = playerController.gameObject;
             e.Died += OnEnemyKilled;
+            e.Died += playerController.OnEnemyKilled;
             e.SimpleAttack += OnSimpleEnemyAttack;
             e.Init();
             lastSpawnTime = 0f;

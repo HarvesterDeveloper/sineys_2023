@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour
     {
         // check for buffs, debuffs, defense, etc
         health -= val;
-        if (health < 0)
+        if (health <= 0)
         {
             Died(this);
             Destroy(this.gameObject);

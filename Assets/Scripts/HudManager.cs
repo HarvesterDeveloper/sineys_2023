@@ -10,9 +10,16 @@ public class HudManager : MonoBehaviour
     [SerializeField] private Image progressImage;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private Image fader;
+    [SerializeField] private GameObject upgradePanel;
     private bool fadeLimiter = false;
     private float fadePower = 0.1f;
     private float timeSinceStart = 0f;
+
+    private void Start()
+    {
+        gameManager.Player.LevelUp += OnLevelUp;
+        gameManager.AnyUpgradeChoosed += OnUpgraded;
+    }
 
     private void Update()
     {
@@ -39,5 +46,15 @@ public class HudManager : MonoBehaviour
         progressImage.fillAmount = (float) gameManager.Player.KillCount / (float) gameManager.RequiredToLevelUp;
         progressText.text = "Прогресс: " + gameManager.Player.KillCount + "/" + gameManager.RequiredToLevelUp
             + ". Уровень: " + gameManager.Player.Level + "/" + gameManager.RequiredToComplete;
+    }
+
+    private void OnLevelUp()
+    {
+        upgradePanel.SetActive(true);
+    }
+
+    private void OnUpgraded()
+    {
+        upgradePanel.SetActive(false);
     }
 }
