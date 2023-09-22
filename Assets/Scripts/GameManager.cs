@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public enum Mission
+    {
+        LEVEL_ONE,
+        LEVEL_TWO,
+        LEVEL_THREE
+    }
+
     [SerializeField] private PlayerController playerController;
-    private int enemiesDied = 0;
-    [SerializeField] private int requiredToKill = 10;
+    [SerializeField] private Mission mission = Mission.LEVEL_ONE;
+    private int requiredToLevelUp = 10; // initial for first level up
+    private int requiredToComplete = 5; // lvls to complete mission
+    private float lastSpawnTime = 0f;
 
     public PlayerController Player
     {
@@ -16,19 +25,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int EnemiesDied
+    public int RequiredToLevelUp
     {
         get
         {
-            return enemiesDied;
+            return requiredToLevelUp;
         }
     }
 
-    public int RequiredToKill
+    public int RequiredToComplete
     {
         get
         {
-            return requiredToKill;
+            return requiredToComplete;
         }
     }
 
@@ -54,9 +63,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EnemyDied(Enemy dead)
+    public void TellEnemyKilled(Enemy dead)
     {
-        enemiesDied++;
+        playerController.TellEnemyKilled();
     }
 
     public void TellPlayerMeleeAttack()
@@ -79,7 +88,33 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        switch (mission)
+        {
+            case Mission.LEVEL_ONE:
+                requiredToLevelUp = 10;
+                requiredToComplete = 5;
+                break;
+            case Mission.LEVEL_TWO:
+                requiredToLevelUp = 25;
+                requiredToComplete = 7;
+                break;
+            case Mission.LEVEL_THREE:
+                requiredToLevelUp = 33;
+                requiredToComplete = 10;
+                break;
+        }
         StartCoroutine("EverySecond");
+    }
+
+    private void Update()
+    {
+        lastSpawnTime += Time.deltaTime;
+
+        if (lastSpawnTime > 3f)
+        {
+            // spawn enemy
+            lastSpawnTime = 0f;
+        }
     }
 
     private IEnumerator EverySecond()

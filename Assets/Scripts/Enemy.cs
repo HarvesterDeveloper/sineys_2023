@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
         health -= val;
         if (health < 0)
         {
-            gameManager.EnemyDied(this);
+            gameManager.TellEnemyKilled(this);
             Destroy(this.gameObject);
         }
             

@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private float cooldown = 0f;
     private const float meleeCooldown = 1f;
+    private int killCount = 0;
+    private int level = 1;
 
     public float Health
     {
@@ -28,9 +30,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public int KillCount
+    {
+        get
+        {
+            return killCount;
+        }
+    }
+
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+    }
+
     public void TellDamage(float hp)
     {
         health -= hp;
+    }
+
+    public void TellEnemyKilled()
+    {
+        killCount++;
+        if (killCount > gameManager.RequiredToLevelUp)
+        {
+            level++;
+            killCount = 0;
+        }
+        // boost as kill reward
     }
 
     private void Start()
