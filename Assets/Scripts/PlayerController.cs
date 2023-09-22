@@ -5,7 +5,25 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     [Header("Initial parameters")]
-    [SerializeField] float speed = 5;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float health = 100f;
+    [SerializeField] private float maxHealth = 100f;
+
+    public float Health
+    {
+        get
+        {
+            return health;
+        }
+    }
+
+    public float MaxHealth
+    {
+        get
+        {
+            return maxHealth;
+        }
+    }
 
     private void Start()
     {
