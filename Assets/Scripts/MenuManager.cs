@@ -7,4 +7,9 @@ public class MenuManager : MonoBehaviour
     {
         SceneManager.LoadScene("Match"); // Change it to right name
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }
