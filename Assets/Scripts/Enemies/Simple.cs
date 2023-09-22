@@ -4,6 +4,7 @@ public class Simple : Enemy
 {
     private float cooldown = 0f;
     private const float attackCooldown = 3f;
+    public event EnemyAction SimpleAttack;
 
     private void Start()
     {
@@ -14,21 +15,25 @@ public class Simple : Enemy
 
     private void Update()
     {
-        GameObject plr = gameManager.Player.gameObject;
-
-        float angle = GameManager.DegAngleRelative(transform.position, plr.transform.position);
-
-        if (Vector2.Distance(transform.position, gameManager.Player.transform.position) > 1f)
-            rb.AddForce(new Vector2(-Mathf.Cos(angle) * speed * Time.deltaTime, -Mathf.Sin(angle) * speed * Time.deltaTime));
-
-        if (cooldown <= 0f)
+        if (target != null)
         {
-            gameManager.TellEnemyAttack(this);
-            cooldown = attackCooldown;
-        }
-        else
-        {
-            cooldown -= Time.deltaTime;
+            if (Vector2.Distance(transform.position, target.transform.position) > 1f)
+            {
+                float angle = GameManager.DegAngleRelative(transform.position, target.transform.position);
+                rb.AddForce(new Vector2(-Mathf.Cos(angle) * speed * Time.deltaTime, -Mathf.Sin(angle) * speed * Time.deltaTime));
+            }
+            else
+            {
+                if (cooldown <= 0f)
+                {
+                    SimpleAttack(this);
+                    cooldown = attackCooldown;
+                }
+                else
+                {
+                    cooldown -= Time.deltaTime;
+                }
+            }
         }
     }
 }

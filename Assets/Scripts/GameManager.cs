@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Mission mission = Mission.LEVEL_ONE;
+    [SerializeField] private GameObject simpleEnemyprefab;
     private int requiredToLevelUp = 10; // initial for first level up
     private int requiredToComplete = 5; // lvls to complete mission
     private float lastSpawnTime = 0f;
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour
         return angle;
     }
 
-    public void TellEnemyAttack(Enemy initiator)
+    private void OnSimpleEnemyAttack(Enemy initiator)
     {
         if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 1f)
         {
@@ -62,12 +63,6 @@ public class GameManager : MonoBehaviour
             //Debug.Log(initiator.Damage * (initiator.Health / initiator.MaxHealth));
         }
     }
-
-    public void TellEnemyKilled(Enemy dead)
-    {
-        playerController.TellEnemyKilled();
-    }
-
     public void TellPlayerMeleeAttack()
     {
         Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -84,6 +79,11 @@ public class GameManager : MonoBehaviour
             if (temp != null)
                 temp.TellDamage(25f);
         }
+    }
+
+    private void OnEnemyKilled(Enemy dead)
+    {
+        playerController.TellEnemyKilled();
     }
 
     private void Start()
@@ -112,7 +112,11 @@ public class GameManager : MonoBehaviour
 
         if (lastSpawnTime > 3f)
         {
-            // spawn enemy
+            GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
+            Simple e = spawned.GetComponent<Simple>();
+            e.target = playerController.gameObject;
+            e.Died += OnEnemyKilled;
+            e.SimpleAttack += OnSimpleEnemyAttack;
             lastSpawnTime = 0f;
         }
     }

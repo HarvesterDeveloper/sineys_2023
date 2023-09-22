@@ -4,17 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected GameManager gameManager;
+    public delegate void EnemyAction(Enemy caller);
+
     protected float health = 100f;
     protected float maxHealth = 100f;
     protected float speed = 50f;
     protected float damage = 5f;
+    [HideInInspector] public GameObject target;
     protected Rigidbody2D rb;
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    public event EnemyAction Died;
 
     public float Health
     {
@@ -46,9 +44,14 @@ public class Enemy : MonoBehaviour
         health -= val;
         if (health < 0)
         {
-            gameManager.TellEnemyKilled(this);
+            Died(this);
             Destroy(this.gameObject);
         }
             
+    }
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
     }
 }
