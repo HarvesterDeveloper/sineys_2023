@@ -3,11 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     public delegate void PlayerAction();
 
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip meleeSound;
     /*[Header("Initial parameters")]*/
     private float speed = 2000f;
     private float health = 100f;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
 	private bool isLeft = true;
 	private bool swinging = false;
 	private bool swingDirLimiter = false;
+	private AudioSource audiosource;
 
     public float Health
     {
@@ -86,6 +90,9 @@ public class PlayerController : MonoBehaviour
     public void TellDamage(float hp)
     {
         health -= hp;
+		audiosource.clip = hurtSound;
+		audiosource.volume = 2f;
+		audiosource.Play();
     }
 
     public void OnEnemyKilled(Enemy who)
@@ -105,6 +112,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 		sr = GetComponent<SpriteRenderer>();
+		audiosource = GetComponent<AudioSource>();
     }
 
     private void Update()
