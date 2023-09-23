@@ -16,9 +16,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Mission mission = Mission.LEVEL_ONE;
     [SerializeField] private GameObject simpleEnemyprefab;
-    private int requiredToLevelUp = 10; // initial for first level up
+    private int requiredToLevelUp = 10;
+	private int levelUpIncrease = 5;
     private int requiredToComplete = 5; // lvls to complete mission
     private float lastSpawnTime = 0f;
+	private float maxSpawnCooldown = 3f;
+	private float spawnCooldown = 3f;
     public event GameManagerAction AnyUpgradeChoosed;
 
     public PlayerController Player
@@ -69,7 +72,6 @@ public class GameManager : MonoBehaviour
         if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 1f)
         {
             playerController.TellDamage(initiator.Damage * (initiator.Health / initiator.MaxHealth));
-            //Debug.Log(initiator.Damage * (initiator.Health / initiator.MaxHealth));
         }
     }
     private void OnPlayerMeleeAttack()
@@ -79,16 +81,6 @@ public class GameManager : MonoBehaviour
 
         float angle = DegAngleRelative(playerController.transform.position, mousePos);
 		angle *= Mathf.Deg2Rad;
-
-        /*Collider2D[] colliders = Physics2D.OverlapAreaAll(playerController.transform.position + new Vector3(-Mathf.Cos(angle) - playerController.MeleeRange, -Mathf.Sin(angle) + playerController.MeleeRange),
-            playerController.transform.position + new Vector3(-Mathf.Cos(angle) + playerController.MeleeRange, -Mathf.Sin(angle) - playerController.MeleeRange));
-        foreach (Collider2D collider in colliders)
-        {
-            Enemy temp = null;
-            collider.gameObject.TryGetComponent<Enemy>(out temp);
-            if (temp != null)
-                temp.TellDamage(playerController.Damage);
-        }*/
 		
 		RaycastHit2D hit = Physics2D.Raycast(playerController.transform.position, new Vector2(-Mathf.Cos(angle), -Mathf.Sin(angle)), playerController.meleeRange, LayerMask.GetMask("Enemies"));
 		Collider2D col = hit.collider;
@@ -109,6 +101,8 @@ public class GameManager : MonoBehaviour
     private void OnLevelUp()
     {
         Time.timeScale = 0f;
+		requiredToLevelUp = requiredToLevelUp += levelUpIncrease;
+		spawnCooldown = maxSpawnCooldown - ((float)playerController.Level / (float)requiredToComplete * maxSpawnCooldown) / 0.9f;
     }
 
     private void Start()
@@ -137,7 +131,7 @@ public class GameManager : MonoBehaviour
     {
         lastSpawnTime += Time.deltaTime;
 
-        if (lastSpawnTime > 3f)
+        if (lastSpawnTime > spawnCooldown)
         {
             GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
             Simple e = spawned.GetComponent<Simple>();

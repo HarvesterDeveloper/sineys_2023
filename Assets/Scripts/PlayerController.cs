@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
     public void OnEnemyKilled(Enemy who)
     {
         killCount++;
-        if (killCount > gameManager.RequiredToLevelUp)
+        if (killCount >= gameManager.RequiredToLevelUp)
         {
             level++;
             killCount = 0;
