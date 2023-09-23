@@ -150,6 +150,15 @@ public class PlayerController : MonoBehaviour
 		if (!swinging)
 			rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
 		
+		if (rb.velocity.x > 0.5f  || rb.velocity.y > 0.5f || rb.velocity.x < -0.5f || rb.velocity.y < -0.5f)
+		{
+			animator.SetBool("Walking", true);
+		}
+		else
+		{
+			animator.SetBool("Walking", false);
+		}
+		
 		if (!swinging && animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Player attack")
 		{
 			if (rb.velocity.x < 0f)
