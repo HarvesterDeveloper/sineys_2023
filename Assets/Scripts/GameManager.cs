@@ -210,17 +210,7 @@ public class GameManager : MonoBehaviour
 			{
 				float enemytype = UnityEngine.Random.Range(0, 2);
 				//Debug.Log("lst="+lastSpawnTime+" ec="+enemiesCount+" sc="+spawnCooldown);
-				if (enemytype == 0)
-				{
-					GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
-					spawned.name = "Simple";
-					Simple e = spawned.GetComponent<Simple>();
-					e.target = playerController.gameObject;
-					e.Died += OnEnemyKilled;
-					e.Died += playerController.OnEnemyKilled;
-					e.SimpleAttack += OnSimpleEnemyAttack;
-				}
-				else
+				if (enemytype != 0 && mission != Mission.LEVEL_ONE)
 				{
 					GameObject spawned =  Instantiate(reaperPrefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
 					spawned.name = "Reaper";
@@ -229,6 +219,16 @@ public class GameManager : MonoBehaviour
 					e.Died += OnEnemyKilled;
 					e.Died += playerController.OnEnemyKilled;
 					e.ReaperFireball += OnReaperFireball;
+				}
+				else
+				{
+					GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
+					spawned.name = "Simple";
+					Simple e = spawned.GetComponent<Simple>();
+					e.target = playerController.gameObject;
+					e.Died += OnEnemyKilled;
+					e.Died += playerController.OnEnemyKilled;
+					e.SimpleAttack += OnSimpleEnemyAttack;
 				}
 				
 

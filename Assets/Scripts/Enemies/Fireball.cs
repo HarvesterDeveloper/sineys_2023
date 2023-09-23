@@ -13,7 +13,7 @@ public class Fireball : MonoBehaviour
 	
     private void OnCollisionEnter2D(Collision2D collision)
     {
-		Debug.Log(collision.gameObject.name);
+		//Debug.Log(collision.gameObject.name);
 		
 		PlayerController temp = null;
 		collision.gameObject.TryGetComponent<PlayerController>(out temp);
