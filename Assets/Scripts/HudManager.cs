@@ -44,6 +44,7 @@ public class HudManager : MonoBehaviour
 	
 	public void OnMissionComplete()
 	{
+		upgradePanel.SetActive(false);
 		winFade = true;
 		fadePower = 0.1f;
 	}

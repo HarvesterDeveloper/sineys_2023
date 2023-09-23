@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
 
 	public void LaunchGame()
     {
-        SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene("MissionOne");
     }
 
     public void QuitGame()

@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSimpleEnemyAttack(Enemy initiator)
     {
-        if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 1f)
+        if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 2f) // 2f - simple's range
         {
             playerController.TellDamage(initiator.Damage * (initiator.Health / initiator.MaxHealth));
         }
