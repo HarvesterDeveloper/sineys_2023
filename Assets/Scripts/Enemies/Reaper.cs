@@ -18,6 +18,11 @@ public class Reaper : Enemy
     {
 		base.Update();
 		
+		if (target.transform.position.x > transform.position.x)
+				isLeft = false;
+		else if (target.transform.position.x < transform.position.x)
+				isLeft = true;
+		
         if (target != null)
         {
             if (Vector2.Distance(transform.position, target.transform.position) > 5f)

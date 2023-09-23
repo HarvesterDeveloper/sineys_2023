@@ -2280,7 +2280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 997662718}
-  mission: 0
+  mission: 1
   simpleEnemyprefab: {fileID: 8211704722996185391, guid: f6136fc58affc0a4b8b69b1d522d7e5b, type: 3}
   reaperPrefab: {fileID: 1365022572311970926, guid: a451e981f61613848913bf2ad495da23, type: 3}
   fireballPrefab: {fileID: 7217068424043186812, guid: c853e5e9e3cee4548b449744f30c281f, type: 3}
