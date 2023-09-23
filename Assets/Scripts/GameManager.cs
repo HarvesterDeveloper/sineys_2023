@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	private int maxEnemyCount = 10;
 	public event GameManagerAction MissionComplete;
 	public event GameManagerAction PlayerHitSomeone;
+	private bool missionEnded = false;
 
     public PlayerController Player
     {
@@ -121,6 +122,7 @@ public class GameManager : MonoBehaviour
 		if (playerController.Level > requiredToComplete)
 		{
 			MissionComplete();
+			missionEnded = true;
 		}
 		else
 		{
@@ -133,6 +135,7 @@ public class GameManager : MonoBehaviour
 	private void OnPlayerDied()
 	{
 		DestroyAllEnemies();
+		missionEnded = true;
 	}
 
     private void Start()
@@ -167,6 +170,9 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         lastSpawnTime += Time.deltaTime;
+
+		if (missionEnded)
+			return;
 
 		if (enemiesCount < maxEnemyCount && enemiesCount < 100) //100 - hardcoded just in case
 		{
