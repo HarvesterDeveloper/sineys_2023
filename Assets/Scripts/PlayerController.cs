@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip meleeSound;
+    [SerializeField] private GameObject playeBodyPrefab;
     /*[Header("Initial parameters")]*/
     private float speed = 2000f;
     private float health = 100f;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
 	private bool swinging = false;
 	private bool swingDirLimiter = false;
 	private AudioSource audiosource;
+	public event PlayerAction Died;
 
     public float Health
     {
@@ -93,6 +95,13 @@ public class PlayerController : MonoBehaviour
 		audiosource.clip = hurtSound;
 		audiosource.volume = 2f;
 		audiosource.Play();
+		
+		if (health <= 0)
+		{
+			Destroy(this.gameObject);
+			Instantiate(playeBodyPrefab, transform.position, Quaternion.identity);
+			Died();
+		}
     }
 
     public void OnEnemyKilled(Enemy who)
@@ -106,6 +115,11 @@ public class PlayerController : MonoBehaviour
         }
         // boost as kill reward
     }
+	
+	public void OnSwingAnimationEnd()
+	{
+		MeleeAttack();
+	}
 
     private void Start()
     {
@@ -131,7 +145,6 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Attacking", true);
             cooldown = meleeCooldown;
 			swinging = true;
-			MeleeAttack();
         }
 		
 		if (!swinging)

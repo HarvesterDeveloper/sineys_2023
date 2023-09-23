@@ -17,8 +17,8 @@ public class HudManager : MonoBehaviour
     [SerializeField] private GameObject menu;
 	[SerializeField] private Slider volumeSlider;
     private float fadePower = 0.1f;
-	private bool winFade = false;
-	private float winFadeTime = 0f;
+	private bool endFade = false;
+	private float fadeTime = 0f;
     private float timeSinceStart = 0f;
 	public event HudAction MenuOpened;
 	public event HudAction MenuClosed;
@@ -45,7 +45,7 @@ public class HudManager : MonoBehaviour
 	public void OnMissionComplete()
 	{
 		upgradePanel.SetActive(false);
-		winFade = true;
+		endFade = true;
 		fadePower = 0.1f;
 	}
 	
@@ -55,13 +55,22 @@ public class HudManager : MonoBehaviour
 		PlayerPrefs.Save();
 	}
 
+	public void OnPlayerDied()
+	{
+		upgradePanel.SetActive(false);
+		endFade = true;
+		fadePower = 0.1f;
+	}
+
     private void Start()
     {
         gameManager.Player.LevelUp += OnLevelUp;
 		gameManager.MissionComplete += OnMissionComplete;
+		gameManager.Player.Died += OnPlayerDied;
 		MeleeRangeUpgraded += gameManager.OnMeleeRangeUpgrade;
 		MenuOpened += gameManager.OnMenuOpened;
 		MenuClosed += gameManager.OnMenuClosed;
+		
     }
 
     private void Update()
@@ -75,18 +84,21 @@ public class HudManager : MonoBehaviour
             fader.color = temp;
             fadePower += 0.25f * Time.deltaTime;
         }
-		else if (winFade)
+		else if (endFade)
 		{
 			Color temp = fader.color;
             temp.a += fadePower * Time.deltaTime;
             fader.color = temp;
             fadePower += 0.25f * Time.deltaTime;
 			
-			winFadeTime += Time.deltaTime;
+			fadeTime += Time.deltaTime;
 			
-			if (winFadeTime >= 3f)
+			if (fadeTime >= 3f)
 			{
-				SceneManager.LoadScene("Menu");// goto next level
+				if (gameManager.Player.Health > 0f)
+					SceneManager.LoadScene("Menu");// goto next level
+				else
+					SceneManager.LoadScene("Menu");
 			}
 		}
 		

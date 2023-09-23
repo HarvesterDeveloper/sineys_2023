@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
     {
         if (Vector2.Distance(initiator.transform.position, playerController.gameObject.transform.position) < 2f) // 2f - simple's range
         {
-            playerController.TellDamage(initiator.Damage * (initiator.Health / initiator.MaxHealth));
+            playerController.TellDamage(initiator.Damage);
         }
     }
     private void OnPlayerMeleeAttack()
@@ -114,14 +115,20 @@ public class GameManager : MonoBehaviour
 		if (playerController.Level > requiredToComplete)
 		{
 			MissionComplete();
+			DestroyAllEnemies();
 		}
 		else
 		{
 			Time.timeScale = 0f;
 			requiredToLevelUp = requiredToLevelUp += levelUpIncrease;
-			spawnCooldown = maxSpawnCooldown - ((float)playerController.Level / (float)requiredToComplete * maxSpawnCooldown) / 0.9f;
+			//spawnCooldown = maxSpawnCooldown; // fixme
 		}
     }
+	
+	private void OnPlayerDied()
+	{
+		DestroyAllEnemies();
+	}
 
     private void Start()
     {
@@ -149,6 +156,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine("EverySecond");
         playerController.MeleeAttack += OnPlayerMeleeAttack;
         playerController.LevelUp += OnLevelUp;
+        playerController.Died += OnPlayerDied;
     }
 
     private void Update()
@@ -159,6 +167,7 @@ public class GameManager : MonoBehaviour
 		{
 			if (lastSpawnTime > spawnCooldown)
 			{
+				Debug.Log("lst="+lastSpawnTime+" ec="+enemiesCount+" sc="+spawnCooldown);
 				GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
 				spawned.name = "Simple";
 				Simple e = spawned.GetComponent<Simple>();
@@ -167,11 +176,20 @@ public class GameManager : MonoBehaviour
 				e.Died += playerController.OnEnemyKilled;
 				e.SimpleAttack += OnSimpleEnemyAttack;
 				lastSpawnTime = 0f;
-			
 				enemiesCount++;
 			}
 		}
     }
+	
+	private void DestroyAllEnemies()
+	{
+		Enemy[] objects = FindObjectsOfType<Enemy>();
+
+        foreach (Enemy e in objects)
+        {
+			Destroy(e.gameObject);
+        }
+	}
 
     private IEnumerator EverySecond()
     {
