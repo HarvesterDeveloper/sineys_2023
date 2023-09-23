@@ -618,6 +618,7 @@ MonoBehaviour:
   front: {fileID: 608327149}
   settingsPanel: {fileID: 1253949601}
   volumeSlider: {fileID: 143836583}
+  playButtonText: {fileID: 1161722932}
 --- !u!1 &293175508
 GameObject:
   m_ObjectHideFlags: 0

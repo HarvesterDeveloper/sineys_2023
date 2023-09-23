@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 	private int levelUpIncrease = 5;
     private int requiredToComplete = 5; // lvls to complete mission
     private float lastSpawnTime = 0f;
-	private float maxSpawnCooldown = 3f;
+	//private float maxSpawnCooldown = 3f;
 	private float spawnCooldown = 3f;
 	private int enemiesCount = 0;
 	private int maxEnemyCount = 10;
@@ -122,6 +122,21 @@ public class GameManager : MonoBehaviour
 		if (playerController.Level > requiredToComplete)
 		{
 			MissionComplete();
+			switch (mission)
+			{
+				case Mission.LEVEL_ONE:
+					PlayerPrefs.SetInt("level", 2);
+					PlayerPrefs.Save();
+					break;
+				case Mission.LEVEL_TWO:
+					PlayerPrefs.SetInt("level", 3);
+					PlayerPrefs.Save();
+					break;
+				case Mission.LEVEL_THREE:
+					PlayerPrefs.SetInt("level", 3);
+					PlayerPrefs.Save();
+					break;
+			}
 			missionEnded = true;
 		}
 		else

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
@@ -8,11 +9,13 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject front;
 	[SerializeField] private GameObject settingsPanel;
 	[SerializeField] private Slider volumeSlider;
+	[SerializeField] private TMP_Text playButtonText;
     private float lifeTime = 0f;
+	private int level = 1;
 
 	public void LaunchGame()
     {
-        SceneManager.LoadScene("MissionOne");
+        SceneManager.LoadScene("Intro");
     }
 
     public void QuitGame()
@@ -36,6 +39,11 @@ public class MenuManager : MonoBehaviour
 		PlayerPrefs.SetFloat("volume", volumeSlider.value);
 		PlayerPrefs.Save();
 	}
+	
+	private void Start()
+	{
+		level = PlayerPrefs.GetInt("level", 1);
+	}
 
     private void Update()
     {
@@ -43,6 +51,11 @@ public class MenuManager : MonoBehaviour
 
         background.transform.position = new Vector2(Mathf.Cos(lifeTime) * 40f, Mathf.Sin(lifeTime) * 20f);
         front.transform.position = new Vector2(-Mathf.Cos(lifeTime) * 10f, Mathf.Sin(lifeTime) * 5f);
+		
+		if (level == 1)
+			playButtonText.text = "Новая игра";
+		else
+			playButtonText.text = "Продолжить";
     }
 
 
