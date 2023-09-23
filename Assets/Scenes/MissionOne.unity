@@ -949,6 +949,7 @@ GameObject:
   - component: {fileID: 997662718}
   - component: {fileID: 997662720}
   - component: {fileID: 997662721}
+  - component: {fileID: 997662722}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1187,6 +1188,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!70 &997662722
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997662715}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.4, y: 2.4}
+  m_Direction: 0
 --- !u!1 &1052219614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1813,6 +1849,8 @@ MonoBehaviour:
   playerController: {fileID: 997662718}
   mission: 0
   simpleEnemyprefab: {fileID: 8211704722996185391, guid: f6136fc58affc0a4b8b69b1d522d7e5b, type: 3}
+  reaperPrefab: {fileID: 1365022572311970926, guid: a451e981f61613848913bf2ad495da23, type: 3}
+  fireballPrefab: {fileID: 7217068424043186812, guid: c853e5e9e3cee4548b449744f30c281f, type: 3}
 --- !u!4 &1447884544
 Transform:
   m_ObjectHideFlags: 0

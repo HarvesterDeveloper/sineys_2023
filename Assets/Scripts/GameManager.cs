@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Mission mission = Mission.LEVEL_ONE;
     [SerializeField] private GameObject simpleEnemyprefab;
+    [SerializeField] private GameObject reaperPrefab;
+    [SerializeField] private GameObject fireballPrefab;
     private int requiredToLevelUp = 10;
 	private int levelUpIncrease = 5;
     private int requiredToComplete = 5; // lvls to complete mission
@@ -88,6 +90,17 @@ public class GameManager : MonoBehaviour
             playerController.TellDamage(initiator.Damage);
         }
     }
+	
+	private void OnReaperFireball(Enemy initiator)
+	{
+		GameObject spawned =  Instantiate(fireballPrefab, initiator.transform.position, Quaternion.identity);
+		spawned.name = "Fireball";
+		Fireball f = spawned.GetComponent<Fireball>();
+		float angle = DegAngleRelative(initiator.transform.position, playerController.transform.position);
+		angle *= Mathf.Deg2Rad;
+		f.MoveDirection = new Vector2(-Mathf.Cos(angle), -Mathf.Sin(angle));
+	}
+	
     private void OnPlayerMeleeAttack()
     {
         Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -191,16 +204,34 @@ public class GameManager : MonoBehaviour
 
 		if (enemiesCount < maxEnemyCount && enemiesCount < 100) //100 - hardcoded just in case
 		{
+			
+			
 			if (lastSpawnTime > spawnCooldown)
 			{
+				float enemytype = UnityEngine.Random.Range(0, 2);
 				//Debug.Log("lst="+lastSpawnTime+" ec="+enemiesCount+" sc="+spawnCooldown);
-				GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
-				spawned.name = "Simple";
-				Simple e = spawned.GetComponent<Simple>();
-				e.target = playerController.gameObject;
-				e.Died += OnEnemyKilled;
-				e.Died += playerController.OnEnemyKilled;
-				e.SimpleAttack += OnSimpleEnemyAttack;
+				if (enemytype == 0)
+				{
+					GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
+					spawned.name = "Simple";
+					Simple e = spawned.GetComponent<Simple>();
+					e.target = playerController.gameObject;
+					e.Died += OnEnemyKilled;
+					e.Died += playerController.OnEnemyKilled;
+					e.SimpleAttack += OnSimpleEnemyAttack;
+				}
+				else
+				{
+					GameObject spawned =  Instantiate(reaperPrefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
+					spawned.name = "Reaper";
+					Reaper e = spawned.GetComponent<Reaper>();
+					e.target = playerController.gameObject;
+					e.Died += OnEnemyKilled;
+					e.Died += playerController.OnEnemyKilled;
+					e.ReaperFireball += OnReaperFireball;
+				}
+				
+
 				lastSpawnTime = 0f;
 				enemiesCount++;
 			}
