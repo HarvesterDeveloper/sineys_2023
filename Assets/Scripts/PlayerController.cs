@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioClip hurtSound;
     [SerializeField] private AudioClip meleeSound;
+    [SerializeField] private AudioClip hitSomeoneSound;
     [SerializeField] private GameObject playeBodyPrefab;
     /*[Header("Initial parameters")]*/
     private float speed = 2000f;
@@ -92,9 +93,10 @@ public class PlayerController : MonoBehaviour
     public void TellDamage(float hp)
     {
         health -= hp;
-		audiosource.clip = hurtSound;
-		audiosource.volume = 2f;
-		audiosource.Play();
+		/*audiosource.clip = hurtSound;
+		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
+		audiosource.Play();*/
+		audiosource.PlayOneShot(hurtSound, PlayerPrefs.GetFloat("Volume", 1f));
 		
 		if (health <= 0)
 		{
@@ -118,7 +120,19 @@ public class PlayerController : MonoBehaviour
 	
 	public void OnSwingAnimationEnd()
 	{
+		audiosource.PlayOneShot(meleeSound, PlayerPrefs.GetFloat("Volume", 1f));
+		/*audiosource.clip = meleeSound;
+		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
+		audiosource.Play();*/
 		MeleeAttack();
+	}
+	
+	private void OnHitSomeone()
+	{
+		/*audiosource.clip = hitSomeoneSound;
+		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
+		audiosource.Play();*/
+		audiosource.PlayOneShot(hitSomeoneSound, PlayerPrefs.GetFloat("Volume", 1f));
 	}
 
     private void Start()
@@ -127,6 +141,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 		sr = GetComponent<SpriteRenderer>();
 		audiosource = GetComponent<AudioSource>();
+		gameManager.PlayerHitSomeone += OnHitSomeone;
     }
 
     private void Update()
