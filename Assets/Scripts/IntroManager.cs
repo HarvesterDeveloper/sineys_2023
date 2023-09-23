@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class IntroManager : MonoBehaviour
 {
 	[SerializeField] private TMP_Text textTell;
+	[SerializeField] private AudioSource audiosrc;
 	private int wayToLevel = 1;
 	private int paragraph = 1;
 	private Color green = new Color(0f, 1f, 0f);
@@ -19,10 +20,13 @@ public class IntroManager : MonoBehaviour
 	private void Start()
 	{
 		wayToLevel = PlayerPrefs.GetInt("level", 1);
+		audiosrc = GetComponent<AudioSource>();
 	}
 	
 	private void Update()
 	{
+		audiosrc.volume = PlayerPrefs.GetFloat("volume", 1f);
+		
 		if (wayToLevel == 1)
 		{
 			switch (paragraph)

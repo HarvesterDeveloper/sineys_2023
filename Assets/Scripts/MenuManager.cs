@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
 	[SerializeField] private GameObject settingsPanel;
 	[SerializeField] private Slider volumeSlider;
 	[SerializeField] private TMP_Text playButtonText;
+	[SerializeField] private AudioSource audiosrc;
     private float lifeTime = 0f;
 	private int level = 1;
 
@@ -43,6 +44,8 @@ public class MenuManager : MonoBehaviour
 	private void Start()
 	{
 		level = PlayerPrefs.GetInt("level", 1);
+		audiosrc = GetComponent<AudioSource>();
+		
 	}
 
     private void Update()
@@ -56,6 +59,8 @@ public class MenuManager : MonoBehaviour
 			playButtonText.text = "Новая игра";
 		else
 			playButtonText.text = "Продолжить";
+		
+		audiosrc.volume = PlayerPrefs.GetFloat("volume", 1f);
     }
 
 

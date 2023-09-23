@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject simpleEnemyprefab;
     [SerializeField] private GameObject reaperPrefab;
     [SerializeField] private GameObject fireballPrefab;
+	[SerializeField] private AudioSource audiosrc;
     private int requiredToLevelUp = 10;
 	private int levelUpIncrease = 5;
     private int requiredToComplete = 5; // lvls to complete mission
@@ -207,10 +208,14 @@ public class GameManager : MonoBehaviour
         playerController.MeleeAttack += OnPlayerMeleeAttack;
         playerController.LevelUp += OnLevelUp;
         playerController.Died += OnPlayerDied;
+		
+		audiosrc = GetComponent<AudioSource>();
     }
 
     private void Update()
     {
+		audiosrc.volume = PlayerPrefs.GetFloat("volume", 1f);
+		
         lastSpawnTime += Time.deltaTime;
 
 		if (missionEnded)
