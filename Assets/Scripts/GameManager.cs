@@ -193,8 +193,8 @@ public class GameManager : MonoBehaviour
 		{
 			if (lastSpawnTime > spawnCooldown)
 			{
-				Debug.Log("lst="+lastSpawnTime+" ec="+enemiesCount+" sc="+spawnCooldown);
-				GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
+				//Debug.Log("lst="+lastSpawnTime+" ec="+enemiesCount+" sc="+spawnCooldown);
+				GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(playerController.transform.position.x + UnityEngine.Random.Range(-10, 10), playerController.transform.position.y + UnityEngine.Random.Range(-10, 10), 0), Quaternion.identity);
 				spawned.name = "Simple";
 				Simple e = spawned.GetComponent<Simple>();
 				e.target = playerController.gameObject;
