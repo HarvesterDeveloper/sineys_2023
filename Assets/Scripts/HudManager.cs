@@ -15,6 +15,7 @@ public class HudManager : MonoBehaviour
     [SerializeField] private Image fader;
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject menu;
+	[SerializeField] private Slider volumeSlider;
     private float fadePower = 0.1f;
 	private bool winFade = false;
 	private float winFadeTime = 0f;
@@ -45,6 +46,12 @@ public class HudManager : MonoBehaviour
 	{
 		winFade = true;
 		fadePower = 0.1f;
+	}
+	
+	public void OnVolumeChanged()
+	{
+		PlayerPrefs.SetFloat("volume", volumeSlider.value);
+		PlayerPrefs.Save();
 	}
 
     private void Start()
@@ -94,6 +101,7 @@ public class HudManager : MonoBehaviour
             if (!menu.activeSelf)
 			{
 				MenuOpened();
+				volumeSlider.value = PlayerPrefs.GetFloat("volume", 1f);
 				menu.SetActive(true);
 			}
 			else
