@@ -15,8 +15,9 @@ public class HudManager : MonoBehaviour
     [SerializeField] private Image fader;
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject menu;
-    private bool fadeLimiter = false;
     private float fadePower = 0.1f;
+	private bool winFade = false;
+	private float winFadeTime = 0f;
     private float timeSinceStart = 0f;
 	public event HudAction MenuOpened;
 	public event HudAction MenuClosed;
@@ -39,10 +40,17 @@ public class HudManager : MonoBehaviour
 		MenuClosed();
 		menu.SetActive(false);
 	}
+	
+	public void OnMissionComplete()
+	{
+		winFade = true;
+		fadePower = 0.1f;
+	}
 
     private void Start()
     {
         gameManager.Player.LevelUp += OnLevelUp;
+		gameManager.MissionComplete += OnMissionComplete;
 		MeleeRangeUpgraded += gameManager.OnMeleeRangeUpgrade;
 		MenuOpened += gameManager.OnMenuOpened;
 		MenuClosed += gameManager.OnMenuClosed;
@@ -52,21 +60,28 @@ public class HudManager : MonoBehaviour
     {
         timeSinceStart += Time.deltaTime;
         
-        if (!fadeLimiter)
+		if (timeSinceStart < 2.5f)
         {
-            if (timeSinceStart < 2.5f)
-            {
-                Color temp = fader.color;
-                temp.a -= fadePower * Time.deltaTime;
-                fader.color = temp;
-                fadePower += 0.25f * Time.deltaTime;
-            }
-            else
-            {
-                Destroy(fader.gameObject);
-                fadeLimiter = true;
-            }
+            Color temp = fader.color;
+            temp.a -= fadePower * Time.deltaTime;
+            fader.color = temp;
+            fadePower += 0.25f * Time.deltaTime;
         }
+		else if (winFade)
+		{
+			Color temp = fader.color;
+            temp.a += fadePower * Time.deltaTime;
+            fader.color = temp;
+            fadePower += 0.25f * Time.deltaTime;
+			
+			winFadeTime += Time.deltaTime;
+			
+			if (winFadeTime >= 3f)
+			{
+				SceneManager.LoadScene("Menu");// goto next level
+			}
+		}
+		
 
 
         healthImage.fillAmount = gameManager.Player.Health / gameManager.Player.MaxHealth;

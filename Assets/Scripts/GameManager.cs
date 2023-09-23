@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     private float lastSpawnTime = 0f;
 	private float maxSpawnCooldown = 3f;
 	private float spawnCooldown = 3f;
+	private int enemiesCount = 0;
+	private int maxEnemyCount = 10;
+	public event GameManagerAction MissionComplete;
 
     public PlayerController Player
     {
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
 	
 	public void OnMenuClosed()
 	{
-		Time.timeScale = 1f;
+		Time.timeScale = 1f; // gives a bug while choosing upgrade
 	}
 
     private void OnSimpleEnemyAttack(Enemy initiator)
@@ -103,14 +106,21 @@ public class GameManager : MonoBehaviour
 
     private void OnEnemyKilled(Enemy dead)
     {
-        //
+        enemiesCount--;
     }
 
     private void OnLevelUp()
     {
-        Time.timeScale = 0f;
-		requiredToLevelUp = requiredToLevelUp += levelUpIncrease;
-		spawnCooldown = maxSpawnCooldown - ((float)playerController.Level / (float)requiredToComplete * maxSpawnCooldown) / 0.9f;
+		if (playerController.Level > requiredToComplete)
+		{
+			MissionComplete();
+		}
+		else
+		{
+			Time.timeScale = 0f;
+			requiredToLevelUp = requiredToLevelUp += levelUpIncrease;
+			spawnCooldown = maxSpawnCooldown - ((float)playerController.Level / (float)requiredToComplete * maxSpawnCooldown) / 0.9f;
+		}
     }
 
     private void Start()
@@ -119,15 +129,21 @@ public class GameManager : MonoBehaviour
         {
             case Mission.LEVEL_ONE:
                 requiredToLevelUp = 5;
-                requiredToComplete = 5;
+                requiredToComplete = 3;
+				levelUpIncrease = 2;
+				maxEnemyCount = 5;
                 break;
             case Mission.LEVEL_TWO:
-                requiredToLevelUp = 25;
-                requiredToComplete = 7;
+                requiredToLevelUp = 15;
+                requiredToComplete = 5;
+				levelUpIncrease = 5;
+				maxEnemyCount = 15;
                 break;
             case Mission.LEVEL_THREE:
-                requiredToLevelUp = 33;
+                requiredToLevelUp = 20;
                 requiredToComplete = 10;
+				levelUpIncrease = 10;
+				maxEnemyCount = 25;
                 break;
         }
         StartCoroutine("EverySecond");
@@ -139,17 +155,22 @@ public class GameManager : MonoBehaviour
     {
         lastSpawnTime += Time.deltaTime;
 
-        if (lastSpawnTime > spawnCooldown)
-        {
-            GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
-			spawned.name = "Simple";
-            Simple e = spawned.GetComponent<Simple>();
-            e.target = playerController.gameObject;
-            e.Died += OnEnemyKilled;
-            e.Died += playerController.OnEnemyKilled;
-            e.SimpleAttack += OnSimpleEnemyAttack;
-            lastSpawnTime = 0f;
-        }
+		if (enemiesCount < maxEnemyCount)
+		{
+			if (lastSpawnTime > spawnCooldown)
+			{
+				GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
+				spawned.name = "Simple";
+				Simple e = spawned.GetComponent<Simple>();
+				e.target = playerController.gameObject;
+				e.Died += OnEnemyKilled;
+				e.Died += playerController.OnEnemyKilled;
+				e.SimpleAttack += OnSimpleEnemyAttack;
+				lastSpawnTime = 0f;
+			
+				enemiesCount++;
+			}
+		}
     }
 
     private IEnumerator EverySecond()

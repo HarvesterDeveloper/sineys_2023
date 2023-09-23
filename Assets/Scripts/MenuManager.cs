@@ -10,7 +10,7 @@ public class MenuManager : MonoBehaviour
 
 	public void LaunchGame()
     {
-        SceneManager.LoadScene("Match"); // Change it to right name
+        SceneManager.LoadScene("LevelOne");
     }
 
     public void QuitGame()
