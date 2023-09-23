@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
 	private SpriteRenderer sr;
     private float cooldown = 0f;
-    private const float meleeCooldown = 1f;
+    private const float meleeCooldown = 0.5f;
     private int killCount = 0;
     private int level = 1;
     public event PlayerAction MeleeAttack;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public float meleeRange = 2f;
 	private bool isLeft = true;
 	private bool swinging = false;
+	private bool swingDirLimiter = false;
 
     public float Health
     {
@@ -108,26 +109,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (cooldown > 0f)
-            cooldown -= Time.deltaTime;
-
-		if (!swinging)
-			rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
-
-        if (Input.GetMouseButton(0))
+        cooldown -= Time.deltaTime;
+		
+		if (cooldown <= 0f)
+		{
+			animator.SetBool("Attacking", false);
+			swinging = false;
+			swingDirLimiter = false;
+		}
+		
+		if (Input.GetMouseButton(0) && cooldown <= -0.5f)
         {
-            if (cooldown <= 0f)
-            {
-                animator.SetBool("Attacking", true);
-                MeleeAttack();
-                cooldown = meleeCooldown;
-				swinging = true;
-            }
+            animator.SetBool("Attacking", true);
+            cooldown = meleeCooldown;
+			swinging = true;
+			MeleeAttack();
         }
 		
-
-		
-		// this crap all bellow consider that every anim at his base is RIGHT sided
+		if (!swinging)
+			rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
 		
 		if (!swinging && animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Player attack")
 		{
@@ -137,22 +137,20 @@ public class PlayerController : MonoBehaviour
 				isLeft = false;
 		}
 		
-		Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
-		
-		if (swinging)
+		if (swinging && !swingDirLimiter)
 		{
+			Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+			Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
+			
 			if (mousePos.x > transform.position.x)
 				isLeft = false;
 			else if (mousePos.x < transform.position.x)
 				isLeft = true;
+			
+			swingDirLimiter = true;
 		}
 		
-		if (cooldown <= 0f)
-		{
-			animator.SetBool("Attacking", false);
-			swinging = false;
-		}
+
 
 		sr.flipX = isLeft;
     }
