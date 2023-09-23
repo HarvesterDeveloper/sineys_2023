@@ -11,7 +11,7 @@ public class Simple : Enemy
 		base.Start();
 		health = 10f;
         speed = 1000f;
-        damage = 15f;
+        damage = 10f;
     }
 
     protected override void Update()

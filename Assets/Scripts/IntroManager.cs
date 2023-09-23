@@ -28,7 +28,7 @@ public class IntroManager : MonoBehaviour
 					textTell.text = "Герой: Эй, что за?";
 					break;
 				case 2:
-					textTell.text = "Герой: Я же просто сидел дома! Кормил кота с ложечки и поливал розочки на подоконнике.";
+					textTell.text = "Герой: Я же просто сидел дома! Кормил кота с ложечки и поливал розы на подоконнике.";
 					break;
 				case 3:
 					textTell.text = "Злодей: Слушай, приятель. Ты сделал достаточно плохих дел чтобы получить испытание.";
@@ -49,7 +49,42 @@ public class IntroManager : MonoBehaviour
 		}
 		else if (wayToLevel == 2)
 		{
-			textTell.text = "2222";
+			switch (paragraph)
+			{
+				case 1:
+					textTell.text = "Герой: Боже. Я только только что был в прошлом!";
+					break;
+				case 2:
+					textTell.text = "Злодей: Да, смышленышь. Но не радуйся раньше времени, твой путь домой еще не закончен.";
+					break;
+				case 3:
+					textTell.text = "Злодей: Ты побывал в простых временах. Думаю, тебе стоит показать и другие.";
+					break;
+				case 4:
+					SceneManager.LoadScene("MissionTwo");
+					break;
+			}
+		}
+		else if (wayToLevel == 3)
+		{
+			switch (paragraph)
+			{
+				case 1:
+					textTell.text = "Злодей: Хммм. Ты лучше, чем я тебя представлял!";
+					break;
+				case 2:
+					textTell.text = "Злодей: Ладно, победа будет твоей...";
+					break;
+				case 3:
+					textTell.text = "Злодей: Но при одном условии - ты должен вернуться в самый старинные времена.";
+					break;
+				case 4:
+					textTell.text = "Герой: Я просто хочу домой.";
+					break;
+				case 5:
+					SceneManager.LoadScene("MissionThree");
+					break;
+			}
 		}
 	}
 }

@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
 					PlayerPrefs.Save();
 					break;
 				case Mission.LEVEL_THREE:
-					PlayerPrefs.SetInt("level", 3);
+					PlayerPrefs.SetInt("level", 1);
 					PlayerPrefs.Save();
 					break;
 			}
@@ -160,19 +160,19 @@ public class GameManager : MonoBehaviour
             case Mission.LEVEL_ONE:
                 requiredToLevelUp = 5;
                 requiredToComplete = 3;
-				levelUpIncrease = 2;
-				maxEnemyCount = 5;
+				levelUpIncrease = 1;
+				maxEnemyCount = 10;
                 break;
             case Mission.LEVEL_TWO:
-                requiredToLevelUp = 15;
-                requiredToComplete = 5;
-				levelUpIncrease = 5;
+                requiredToLevelUp = 5;
+                requiredToComplete = 4;
+				levelUpIncrease = 2;
 				maxEnemyCount = 15;
                 break;
             case Mission.LEVEL_THREE:
-                requiredToLevelUp = 20;
-                requiredToComplete = 10;
-				levelUpIncrease = 10;
+                requiredToLevelUp = 5;
+                requiredToComplete = 5;
+				levelUpIncrease = 3;
 				maxEnemyCount = 25;
                 break;
         }
