@@ -73,6 +73,20 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 	}
 	
+	public void OnDamageUpgrade()
+	{
+		playerController.Damage += 5f;
+        Time.timeScale = 1f;
+	}
+	
+	public void OnHealUpgrade()
+	{
+		playerController.Health = 100f;
+        Time.timeScale = 1f;
+	}
+	
+	
+	
 	public void OnMenuOpened()
 	{
 		Time.timeScale = 0f;

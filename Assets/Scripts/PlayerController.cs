@@ -40,6 +40,14 @@ public class PlayerController : MonoBehaviour
         {
             return health;
         }
+		
+		set
+        {
+           if (value < 0f)
+                value = 0f;
+           
+          health = value;
+        }
     }
 
     public float MaxHealth
@@ -71,6 +79,14 @@ public class PlayerController : MonoBehaviour
         get
         {
             return damage;
+        }
+		
+		set
+        {
+           if (value < 1f)
+                value = 1f;
+           
+          damage = value;
         }
    }
 

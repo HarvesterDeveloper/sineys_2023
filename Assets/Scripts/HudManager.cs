@@ -23,10 +23,24 @@ public class HudManager : MonoBehaviour
 	public event HudAction MenuOpened;
 	public event HudAction MenuClosed;
 	public event HudAction MeleeRangeUpgraded;
+	public event HudAction DamageUpgraded;
+	public event HudAction HealthUpgraded;
 
     public void OnMeleeRangeUpgrade()
     {
 		MeleeRangeUpgraded();
+		upgradePanel.SetActive(false);
+    }
+	
+	public void OnDamageUpgrade()
+    {
+		DamageUpgraded();
+		upgradePanel.SetActive(false);
+    }
+	
+	public void OnHealthUpgrade()
+    {
+		HealthUpgraded();
 		upgradePanel.SetActive(false);
     }
 	
@@ -68,6 +82,8 @@ public class HudManager : MonoBehaviour
 		gameManager.MissionComplete += OnMissionComplete;
 		gameManager.Player.Died += OnPlayerDied;
 		MeleeRangeUpgraded += gameManager.OnMeleeRangeUpgrade;
+		DamageUpgraded += gameManager.OnDamageUpgrade;
+		HealthUpgraded += gameManager.OnHealUpgrade;
 		MenuOpened += gameManager.OnMenuOpened;
 		MenuClosed += gameManager.OnMenuClosed;
 		
