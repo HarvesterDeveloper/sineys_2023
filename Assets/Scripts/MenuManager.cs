@@ -5,7 +5,28 @@ public class MenuManager : MonoBehaviour
 {
     [SerializeField] private GameObject background;
     [SerializeField] private GameObject front;
+	[SerializeField] private GameObject settingsPanel;
     private float lifeTime = 0f;
+
+	public void LaunchGame()
+    {
+        SceneManager.LoadScene("Match"); // Change it to right name
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+	
+	public void OnOpenSettings()
+	{
+		settingsPanel.SetActive(true);
+	}
+	
+	public void OnCloseSettings()
+	{
+		settingsPanel.SetActive(false);
+	}
 
     private void Update()
     {
@@ -15,13 +36,5 @@ public class MenuManager : MonoBehaviour
         front.transform.position = new Vector2(-Mathf.Cos(lifeTime) * 10f, Mathf.Sin(lifeTime) * 5f);
     }
 
-    public void LaunchGame()
-    {
-        SceneManager.LoadScene("Match"); // Change it to right name
-    }
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
 }
