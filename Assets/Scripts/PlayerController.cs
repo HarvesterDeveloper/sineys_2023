@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class PlayerController : MonoBehaviour
 {
     public delegate void PlayerAction();
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private float damage = 5f;
     private Rigidbody2D rb;
     private Animator animator;
+	private SpriteRenderer sr;
     private float cooldown = 0f;
     private const float meleeCooldown = 1f;
     private int killCount = 0;
@@ -21,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public event PlayerAction MeleeAttack;
     public event PlayerAction LevelUp;
     public float meleeRange = 2f;
+	private bool isLeft = true;
+	private bool swinging = false;
 
     public float Health
     {
@@ -99,6 +103,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+		sr = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -106,26 +111,49 @@ public class PlayerController : MonoBehaviour
         if (cooldown > 0f)
             cooldown -= Time.deltaTime;
 
-        rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
+		if (!swinging)
+			rb.AddForce(new Vector2(Input.GetAxis("Horizontal") * speed * Time.deltaTime, Input.GetAxis("Vertical") * speed * Time.deltaTime));
 
         if (Input.GetMouseButton(0))
         {
-            
-
             if (cooldown <= 0f)
             {
                 animator.SetBool("Attacking", true);
                 MeleeAttack();
                 cooldown = meleeCooldown;
-            }
-            else
-            {
-                animator.SetBool("Attacking", false);
+				swinging = true;
             }
         }
-        else
-        {
-            //
-        }
+		
+
+		
+		// this crap all bellow consider that every anim at his base is RIGHT sided
+		
+		if (!swinging && animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Player attack")
+		{
+			if (rb.velocity.x < 0f)
+				isLeft = true;
+			else if (rb.velocity.x > 0f)
+				isLeft = false;
+		}
+		
+		Vector2 screenPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
+		
+		if (swinging)
+		{
+			if (mousePos.x > transform.position.x)
+				isLeft = false;
+			else if (mousePos.x < transform.position.x)
+				isLeft = true;
+		}
+		
+		if (cooldown <= 0f)
+		{
+			animator.SetBool("Attacking", false);
+			swinging = false;
+		}
+
+		sr.flipX = isLeft;
     }
 }
