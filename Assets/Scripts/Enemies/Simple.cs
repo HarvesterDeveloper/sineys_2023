@@ -26,6 +26,7 @@ public class Simple : Enemy
             if (Vector2.Distance(transform.position, target.transform.position) > 1f)
             {
                 float angle = GameManager.DegAngleRelative(transform.position, target.transform.position);
+				angle *= Mathf.Deg2Rad;
                 rb.AddForce(new Vector2(-Mathf.Cos(angle) * speed * Time.deltaTime, -Mathf.Sin(angle) * speed * Time.deltaTime));
             }
             else

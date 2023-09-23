@@ -53,7 +53,6 @@ public class GameManager : MonoBehaviour
         float angle = (float)((180 / Math.PI) * a2);
         if (angle < 0)
             angle = angle + 360;
-        angle *= Mathf.Deg2Rad;
 
         return angle;
     }
@@ -79,8 +78,9 @@ public class GameManager : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(screenPosition);
 
         float angle = DegAngleRelative(playerController.transform.position, mousePos);
+		angle *= Mathf.Deg2Rad;
 
-        Collider2D[] colliders = Physics2D.OverlapAreaAll(playerController.transform.position + new Vector3(-Mathf.Cos(angle) - playerController.MeleeRange, -Mathf.Sin(angle) + playerController.MeleeRange),
+        /*Collider2D[] colliders = Physics2D.OverlapAreaAll(playerController.transform.position + new Vector3(-Mathf.Cos(angle) - playerController.MeleeRange, -Mathf.Sin(angle) + playerController.MeleeRange),
             playerController.transform.position + new Vector3(-Mathf.Cos(angle) + playerController.MeleeRange, -Mathf.Sin(angle) - playerController.MeleeRange));
         foreach (Collider2D collider in colliders)
         {
@@ -88,7 +88,17 @@ public class GameManager : MonoBehaviour
             collider.gameObject.TryGetComponent<Enemy>(out temp);
             if (temp != null)
                 temp.TellDamage(playerController.Damage);
-        }
+        }*/
+		
+		RaycastHit2D hit = Physics2D.Raycast(playerController.transform.position, new Vector2(-Mathf.Cos(angle), -Mathf.Sin(angle)), playerController.meleeRange, LayerMask.GetMask("Enemies"));
+		Collider2D col = hit.collider;
+		if (col != null)
+		{
+			Enemy temp = null;
+			col.gameObject.TryGetComponent<Enemy>(out temp);
+			if (temp != null)
+				temp.TellDamage(playerController.Damage);
+		}
     }
 
     private void OnEnemyKilled(Enemy dead)
