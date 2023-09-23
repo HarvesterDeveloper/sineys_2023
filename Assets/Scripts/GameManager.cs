@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     private float lastSpawnTime = 0f;
 	private float maxSpawnCooldown = 3f;
 	private float spawnCooldown = 3f;
-    public event GameManagerAction AnyUpgradeChoosed;
 
     public PlayerController Player
     {
@@ -60,12 +59,21 @@ public class GameManager : MonoBehaviour
         return angle;
     }
 
-    public void OnMeleeRangeUpgrade()
-    {
-        playerController.MeleeRange += 1f;
+	public void OnMeleeRangeUpgrade()
+	{
+		playerController.MeleeRange += 1f;
         Time.timeScale = 1f;
-        AnyUpgradeChoosed();
-    }
+	}
+	
+	public void OnMenuOpened()
+	{
+		Time.timeScale = 0f;
+	}
+	
+	public void OnMenuClosed()
+	{
+		Time.timeScale = 1f;
+	}
 
     private void OnSimpleEnemyAttack(Enemy initiator)
     {
