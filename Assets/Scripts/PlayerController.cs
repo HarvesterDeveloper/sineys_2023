@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
 		/*audiosource.clip = hurtSound;
 		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
 		audiosource.Play();*/
-		audiosource.PlayOneShot(hurtSound, PlayerPrefs.GetFloat("Volume", 1f));
+		audiosource.PlayOneShot(hurtSound, PlayerPrefs.GetFloat("volume", 1f));
 		
 		if (health <= 0)
 		{
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
 	
 	public void OnSwingAnimationEnd()
 	{
-		audiosource.PlayOneShot(meleeSound, PlayerPrefs.GetFloat("Volume", 1f));
+		audiosource.PlayOneShot(meleeSound, PlayerPrefs.GetFloat("volume", 1f));
 		/*audiosource.clip = meleeSound;
 		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
 		audiosource.Play();*/
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
 		/*audiosource.clip = hitSomeoneSound;
 		audiosource.volume = PlayerPrefs.GetFloat("Volume", 1f);
 		audiosource.Play();*/
-		audiosource.PlayOneShot(hitSomeoneSound, PlayerPrefs.GetFloat("Volume", 1f));
+		audiosource.PlayOneShot(hitSomeoneSound, PlayerPrefs.GetFloat("volume", 1f));
 	}
 
     private void Start()
