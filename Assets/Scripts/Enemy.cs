@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Enemy : MonoBehaviour
 {
     public delegate void EnemyAction(Enemy caller);
@@ -12,6 +13,8 @@ public class Enemy : MonoBehaviour
     protected float damage = 5f;
     [HideInInspector] public GameObject target;
     protected Rigidbody2D rb;
+	protected bool isLeft = true;
+	protected SpriteRenderer sr;
     public event EnemyAction Died;
 
     public float Health
@@ -50,13 +53,19 @@ public class Enemy : MonoBehaviour
             
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+		sr = GetComponent<SpriteRenderer>();
     }
-
-    public virtual void Init()
-    {
-       //
-    }
+	
+	protected virtual void Update()
+	{
+		if (rb.velocity.x < 0f)
+			isLeft = true;
+		else if (rb.velocity.x > 0f)
+			isLeft = false;
+		
+		sr.flipX = !isLeft;
+	}
 }

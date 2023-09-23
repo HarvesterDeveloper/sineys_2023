@@ -6,21 +6,18 @@ public class Simple : Enemy
     private const float attackCooldown = 3f;
     public event EnemyAction SimpleAttack;
 
-    private void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+		base.Start();
+		health = 10f;
         speed = 1000f;
         damage = 3f;
     }
 
-   public override void Init()
-   {
-       base.Init();
-       health = 10f;
-   }
-
-    private void Update()
+    protected override void Update()
     {
+		base.Update();
+		
         if (target != null)
         {
             if (Vector2.Distance(transform.position, target.transform.position) > 1f)

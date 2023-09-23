@@ -134,12 +134,12 @@ public class GameManager : MonoBehaviour
         if (lastSpawnTime > spawnCooldown)
         {
             GameObject spawned =  Instantiate(simpleEnemyprefab, new Vector3(UnityEngine.Random.Range(0, 10), UnityEngine.Random.Range(0, 10), 0), Quaternion.identity);
+			spawned.name = "Simple";
             Simple e = spawned.GetComponent<Simple>();
             e.target = playerController.gameObject;
             e.Died += OnEnemyKilled;
             e.Died += playerController.OnEnemyKilled;
             e.SimpleAttack += OnSimpleEnemyAttack;
-            e.Init();
             lastSpawnTime = 0f;
         }
     }
